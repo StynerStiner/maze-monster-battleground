@@ -1,0 +1,455 @@
+:root {
+  color-scheme: dark;
+  --bg: #080b10;
+  --panel: #111720;
+  --panel-2: #171e28;
+  --line: #2f3b49;
+  --text: #eef3f8;
+  --muted: #9daaba;
+  --accent: #7fa8ff;
+  --danger: #c24b5a;
+  --good: #6fcf83;
+  --tap: 48px;
+  --gap: 8px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(61, 76, 101, 0.22), transparent 36rem),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  padding: calc(16px + var(--safe-t)) calc(16px + var(--safe-r))
+    calc(16px + var(--safe-b)) calc(16px + var(--safe-l));
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  outline: none;
+}
+
+.game-shell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+h1 {
+  margin: 0 0 5px;
+  font-size: clamp(1.05rem, 4vw, 2.1rem);
+  line-height: 1.15;
+}
+
+.topbar p {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.78rem, 2.6vw, 1rem);
+}
+
+.controls-help {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.controls-help span {
+  border: 1px solid var(--line);
+  background: rgba(17, 23, 32, 0.72);
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+/* Touch vs pointer capability swapping ----------------------------------- */
+.touch-only {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .desktop-only {
+    display: none;
+  }
+
+  .touch-only {
+    display: flex;
+  }
+}
+
+.game-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #090c11;
+  display: flex;
+  justify-content: center;
+  /* Never stretch the board: it must keep the aspect the canvas was sized to. */
+  align-items: center;
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  padding: 16px;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  max-width: 420px;
+  text-align: center;
+  padding: 16px 20px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: rgba(10, 14, 20, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.overlay-card h2 {
+  margin: 0 0 7px;
+  letter-spacing: 0.04em;
+  font-size: clamp(1rem, 4.4vw, 1.5rem);
+}
+
+.overlay-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.8rem, 3vw, 1rem);
+}
+
+/* Control deck: d-pad + action cluster ------------------------------------ */
+.control-deck {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, var(--tap));
+  grid-template-rows: repeat(3, var(--tap));
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.pad {
+  min-height: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  line-height: 1;
+  border-radius: 12px;
+  background: var(--panel-2);
+  touch-action: none;
+}
+
+.pad.up {
+  grid-area: 1 / 2;
+}
+
+.pad.left {
+  grid-area: 2 / 1;
+}
+
+.pad-hub {
+  grid-area: 2 / 2;
+  border-radius: 12px;
+  border: 1px dashed var(--line);
+  opacity: 0.5;
+}
+
+.pad.right {
+  grid-area: 2 / 3;
+}
+
+.pad.down {
+  grid-area: 3 / 2;
+}
+
+.action-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  justify-content: flex-end;
+  flex: 1 1 auto;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--tap);
+  min-width: 88px;
+  flex: 0 1 118px;
+  touch-action: none;
+}
+
+.action small {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.action.fire {
+  background: #5c2530;
+  border-color: #8d3d4b;
+  flex-basis: 132px;
+}
+
+.action.fire:hover {
+  background: #6d2c39;
+}
+
+.utility-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  margin-top: var(--gap);
+}
+
+.utility-row button {
+  flex: 1 1 150px;
+}
+
+button {
+  min-height: var(--tap);
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: var(--panel-2);
+  cursor: pointer;
+  padding: 8px 12px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  button:hover {
+    border-color: #55687d;
+    background: #202a36;
+  }
+}
+
+button:active,
+button.held {
+  transform: translateY(1px);
+  border-color: var(--accent);
+  background: #26364a;
+}
+
+button.primary {
+  background: #27496e;
+  border-color: #416b96;
+}
+
+.status {
+  color: var(--muted);
+  margin: 12px 2px 0;
+  font-size: clamp(0.78rem, 2.7vw, 0.95rem);
+}
+
+/* Tablets and small laptops ---------------------------------------------- */
+@media (max-width: 860px) {
+  body {
+    padding: calc(10px + var(--safe-t)) calc(10px + var(--safe-r))
+      calc(10px + var(--safe-b)) calc(10px + var(--safe-l));
+  }
+
+  .topbar {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .controls-help {
+    justify-content: flex-start;
+  }
+}
+
+/* Phones ------------------------------------------------------------------ */
+@media (max-width: 560px) {
+  :root {
+    --tap: 48px;
+    --gap: 6px;
+  }
+
+  .topbar p {
+    display: none;
+  }
+
+  .action {
+    min-width: 70px;
+    flex: 1 1 70px;
+  }
+
+  .action.fire {
+    flex-basis: 100%;
+    order: -1;
+  }
+
+  .utility-row button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 4px;
+    font-size: 0.76rem;
+  }
+}
+
+/* Short portrait screens: every pixel of height goes to the maze. */
+@media (orientation: portrait) and (max-height: 700px) {
+  :root {
+    --tap: 44px;
+  }
+
+  .status {
+    display: none;
+  }
+
+  .control-deck {
+    margin-top: 8px;
+  }
+}
+
+/* Sub-270px viewports: stack the pad and the action buttons ---------------- */
+@media (max-width: 270px) {
+  :root {
+    --tap: 42px;
+    --gap: 5px;
+  }
+
+  .control-deck {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .action-cluster {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .utility-row button {
+    font-size: 0.7rem;
+  }
+}
+
+/* Landscape phones: pad | maze | actions, so the board keeps full height --- */
+@media (orientation: landscape) and (max-height: 620px) {
+  :root {
+    --tap: 44px;
+    --gap: 6px;
+  }
+
+  .game-shell {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "util  util   util"
+      "pad   panel  act";
+    gap: 6px 8px;
+    align-items: center;
+  }
+
+  .topbar,
+  .status {
+    display: none;
+  }
+
+  /* The deck's children become grid items on either side of the maze. */
+  .control-deck {
+    display: contents;
+  }
+
+  .dpad {
+    grid-area: pad;
+  }
+
+  .game-panel {
+    grid-area: panel;
+  }
+
+  .action-cluster {
+    grid-area: act;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: 108px;
+  }
+
+  .action {
+    width: 100%;
+    flex: 0 0 auto;
+    min-height: 42px;
+  }
+
+  .action.fire {
+    order: -1;
+    flex-basis: auto;
+  }
+
+  .utility-row {
+    grid-area: util;
+    margin: 0;
+  }
+
+  .utility-row button {
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 0.76rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:active,
+  button.held {
+    transform: none;
+  }
+}

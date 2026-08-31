@@ -1,0 +1,9 @@
+{
+  "name": "maze-monster-battleground",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Keyboard maze escape game with a hunting monster.",
+  "scripts": {
+    "serve": "python3 -m http.server 5500"
+  }
+}

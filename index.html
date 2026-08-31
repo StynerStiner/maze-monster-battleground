@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  />
+  <meta name="theme-color" content="#080b10" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Maze Monster Battleground</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell" id="gameRoot" tabindex="0">
+    <header class="topbar">
+      <div class="titles">
+        <h1>Maze Monster Battleground</h1>
+        <p>Find the key, survive the monster, and reach the exit.</p>
+      </div>
+
+      <div class="controls-help desktop-only" aria-label="Keyboard controls">
+        <span>WASD / Arrows · Move</span>
+        <span>Shift · Sprint</span>
+        <span>J · Shoot</span>
+        <span>E · Reload</span>
+        <span>R · Restart</span>
+      </div>
+
+      <div class="controls-help touch-only" aria-label="Touch controls">
+        <span>Drag maze · Move</span>
+        <span>Tap maze · Shoot</span>
+      </div>
+    </header>
+
+    <section class="game-panel">
+      <canvas id="gameCanvas" aria-label="Playable monster maze game"></canvas>
+
+      <div class="overlay" id="overlay">
+        <div class="overlay-card">
+          <h2 id="overlayTitle">ESCAPE THE MONSTER</h2>
+          <p id="overlayText">Click the maze or press a movement key to begin.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="control-deck" aria-label="Movement and combat controls">
+      <div class="dpad" role="group" aria-label="Movement pad">
+        <button type="button" class="pad up" data-hold="w" aria-label="Move up">▲</button>
+        <button type="button" class="pad left" data-hold="a" aria-label="Move left">◀</button>
+        <span class="pad-hub" aria-hidden="true"></span>
+        <button type="button" class="pad right" data-hold="d" aria-label="Move right">▶</button>
+        <button type="button" class="pad down" data-hold="s" aria-label="Move down">▼</button>
+      </div>
+
+      <div class="action-cluster" role="group" aria-label="Combat">
+        <button type="button" id="shootButton" class="action fire">
+          <strong>FIRE</strong><small>J</small>
+        </button>
+        <button type="button" id="sprintButton" class="action">
+          <strong>SPRINT</strong><small>Shift</small>
+        </button>
+        <button type="button" id="reloadButton" class="action">
+          <strong>RELOAD</strong><small>E</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="utility-row" aria-label="Game options">
+      <button type="button" id="musicButton">Music: On</button>
+      <button type="button" id="fullscreenButton">Fullscreen</button>
+      <button type="button" id="restartButton" class="primary">Restart</button>
+    </section>
+
+    <audio
+      id="musicTrack"
+      loop
+      preload="auto"
+      src="sound/For%20the%20creature%20hunt%20_%20danger%20version_.mp3"
+    ></audio>
+
+    <p id="status" class="status" aria-live="polite">
+      Monster HP 250 · Gun damage 50 · Find the key and escape.
+    </p>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
